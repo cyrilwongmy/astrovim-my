@@ -1,6 +1,4 @@
-astronvim.lspkind = astronvim.user_plugin_opts("plugins.lspkind", {
-  mode = "symbol",
-  symbol_map = {
+local symbol_map_astrovim = {
     NONE = "",
     Array = "",
     Boolean = "⊨",
@@ -8,6 +6,8 @@ astronvim.lspkind = astronvim.user_plugin_opts("plugins.lspkind", {
     Constructor = "",
     Key = "",
     Namespace = "",
+    Function = "",
+    Method = "",
     Null = "NULL",
     Number = "#",
     Object = "⦿",
@@ -18,6 +18,51 @@ astronvim.lspkind = astronvim.user_plugin_opts("plugins.lspkind", {
     String = "𝓐",
     TypeParameter = "",
     Unit = "",
-  },
+}
+
+local symbol_map_nvchad = {
+  Namespace = "",
+  Text = " ",
+  Method = " ",
+  Function = " ",
+  Constructor = " ",
+  Field = "ﰠ ",
+  Variable = " ",
+  Class = "ﴯ ",
+  Interface = " ",
+  Module = " ",
+  Property = "ﰠ ",
+  Unit = "塞 ",
+  Value = " ",
+  Enum = " ",
+  Keyword = " ",
+  Snippet = " ",
+  Color = " ",
+  File = " ",
+  Reference = " ",
+  Folder = " ",
+  EnumMember = " ",
+  Constant = " ",
+  Struct = "פּ ",
+  Event = " ",
+  Operator = " ",
+  TypeParameter = " ",
+  Table = "",
+  Object = " ",
+  Tag = "",
+  Array = "[]",
+  Boolean = " ",
+  Number = " ",
+  Null = "ﳠ",
+  String = "𝓐",
+  Calendar = "",
+  Watch = " ",
+  Package = "",
+  Copilot = " ",
+}
+
+astronvim.lspkind = astronvim.user_plugin_opts("plugins.lspkind", {
+  mode = "symbol_text",
+  symbol_map = symbol_map_nvchad,
 })
 require("lspkind").init(astronvim.lspkind)

@@ -18,7 +18,7 @@ setup(astronvim.user_plugin_opts("plugins.cmp", {
   end,
   preselect = cmp.PreselectMode.None,
   formatting = {
-    fields = { "kind", "abbr", "menu" },
+    fields = {"abbr", "menu", "kind"},
     format = lspkind_status_ok and lspkind.cmp_format(astronvim.lspkind) or nil,
   },
   snippet = {
@@ -89,4 +89,4 @@ for setup_opt, setup_table in pairs(astronvim.user_plugin_opts("cmp.setup", {}))
   for pattern, options in pairs(setup_table) do
     setup[setup_opt](pattern, options)
   end
-end
+end    
