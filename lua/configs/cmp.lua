@@ -4,7 +4,9 @@ local lspkind_status_ok, lspkind = pcall(require, "lspkind")
 if not snip_status_ok then return end
 local setup = cmp.setup
 local border_opts =
-  { border = "single", winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None" }
+{ border = "single", winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None" }
+local has_copilot, copilot_cmp = pcall(require, "copilot_cmp.comparators")
+
 
 local function has_words_before()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -18,13 +20,14 @@ setup(astronvim.user_plugin_opts("plugins.cmp", {
   end,
   preselect = cmp.PreselectMode.None,
   formatting = {
-    fields = {"abbr", "menu", "kind"},
+    fields = { "abbr", "menu", "kind" },
     format = lspkind_status_ok and lspkind.cmp_format(astronvim.lspkind) or nil,
   },
   snippet = {
     expand = function(args) luasnip.lsp_expand(args.body) end,
   },
   duplicates = {
+    copilot = 1,
     nvim_lsp = 1,
     luasnip = 1,
     cmp_tabnine = 1,
@@ -84,9 +87,43 @@ setup(astronvim.user_plugin_opts("plugins.cmp", {
       "s",
     }),
   },
+  sources = {
+    { name = "copilot", group_index = 2 },
+    { name = "nvim_lsp", group_index = 2 },
+    { name = "luasnip", group_index = 2 },
+    { name = "path", group_index = 2 },
+    { name = "buffer", group_index = 2 },
+  },
+  sorting = {
+    --keep priority weight at 2 for much closer matches to appear above copilot
+    --set to 1 to make copilot always appear on top
+    priority_weight = 1,
+    comparators = {
+      -- order matters here
+      cmp.config.compare.exact,
+      has_copilot and copilot_cmp.prioritize or nil,
+      has_copilot and copilot_cmp.score or nil,
+      cmp.config.compare.offset,
+      -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
+      cmp.config.compare.score,
+      cmp.config.compare.recently_used,
+      cmp.config.compare.locality,
+      cmp.config.compare.kind,
+      cmp.config.compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
+      -- personal settings:
+      -- cmp.config.compare.recently_used,
+      -- cmp.config.compare.offset,
+      -- cmp.config.compare.score,
+      -- cmp.config.compare.sort_text,
+      -- cmp.config.compare.length,
+      -- cmp.config.compare.order,
+    },
+  },
 }))
 for setup_opt, setup_table in pairs(astronvim.user_plugin_opts("cmp.setup", {})) do
   for pattern, options in pairs(setup_table) do
     setup[setup_opt](pattern, options)
   end
-end    
+end

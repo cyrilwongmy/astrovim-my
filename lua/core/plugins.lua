@@ -122,7 +122,7 @@ local astro_plugins = {
         "TSUpdateSync",
       })
     end,
-    run = function() require("nvim-treesitter.install").update { with_sync = true }() end,
+    run = function() require("nvim-treesitter.install").update { with_sync = true } () end,
     config = function() require "configs.treesitter" end,
   },
 
@@ -150,18 +150,45 @@ local astro_plugins = {
 
   -- Snippet completion source
   ["saadparwaiz1/cmp_luasnip"] = {
-    after = "nvim-cmp",
-    config = function() astronvim.add_user_cmp_source "luasnip" end,
+    -- after = "nvim-cmp",
+    -- config = function() astronvim.add_user_cmp_source "luasnip" end,
+  },
+
+  ["zbirenbaum/copilot.lua"] = {
+    after = "nvim-lspconfig",
+    config = function()
+      vim.defer_fn(function()
+        require('configs.copilot');
+      end, 100)
+    end,
+  },
+
+  ["zbirenbaum/copilot-cmp"] = {
+    -- after = { "copilot.lua", "nvim-cmp" },
+    config = function()
+      require("copilot_cmp").setup({
+        clear_after_cursor = true,
+      })
+    end
   },
 
   -- Buffer completion source
-  ["hrsh7th/cmp-buffer"] = { after = "nvim-cmp", config = function() astronvim.add_user_cmp_source "buffer" end },
+  ["hrsh7th/cmp-buffer"] = {
+    -- after = "nvim-cmp",
+    -- config = function() astronvim.add_user_cmp_source "buffer" end
+  },
 
   -- Path completion source
-  ["hrsh7th/cmp-path"] = { after = "nvim-cmp", config = function() astronvim.add_user_cmp_source "path" end },
+  ["hrsh7th/cmp-path"] = {
+    -- after = "nvim-cmp",
+    -- config = function() astronvim.add_user_cmp_source "path" end
+  },
 
   -- LSP completion source
-  ["hrsh7th/cmp-nvim-lsp"] = { after = "nvim-cmp", config = function() astronvim.add_user_cmp_source "nvim_lsp" end },
+  ["hrsh7th/cmp-nvim-lsp"] = {
+    -- after = "nvim-cmp",
+    -- config = function() astronvim.add_user_cmp_source "nvim_lsp" end
+  },
 
   -- Built-in LSP
   ["neovim/nvim-lspconfig"] = {
